@@ -85,6 +85,9 @@ server.get('/get-upload-url',(req,res)=>{
         return res.status(500).json({error: err.message })
     })
 })
+server.get('/',(req,res)=>{
+   res.send("API Working")
+})
 
 server.post('/create-blog',verifyJwt, (req,res)=>{
             
