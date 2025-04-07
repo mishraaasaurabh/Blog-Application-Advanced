@@ -4,10 +4,17 @@ import InPageNavigation from "../components/inpage-navigation.component"
 import { useEffect, useState } from "react"
 import Loader from "../components/loader.component"
 import BlogPostCard from "../components/blog-post.component"
+import MinimalBlogPost from "../components/nobanner-blog-post.component"
+import { activetablineref, activetab } from "../components/inpage-navigation.component"
+
 const HomePage = () => {
 
     let [blogs, setBlog] = useState(null)
+    let [trendingblogs, setTrendingblogs] = useState(null)
 
+    let [pagestate, setpagestate] = useState("home");
+
+    let categories = ["programming", "hollywood", "film making", "social media", "cooking", "tech", "finances","travel","history"];
 
     const fetchlatestblogs = () => {
         axios.get(import.meta.env.VITE_SERVER_DOMAIN + "/latest-blogs")
@@ -20,9 +27,39 @@ const HomePage = () => {
         })
     }
 
+    const fetchtrendingblogs = () => {
+        axios.get(import.meta.env.VITE_SERVER_DOMAIN + "/trending-blogs")
+        .then(({data})=>{
+            // console.log(data.blogs)
+            setTrendingblogs(data.blogs)
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
+
+    const loadBlogbycategory = (e) => {
+        let category = e.target.innerText.toLowerCase(); 
+        // console.log(e);
+        setBlog(null);
+        if(pagestate==category){
+            setpagestate("home")
+        }
+        else{
+
+            setpagestate(category);  
+        }
+    }
+
     useEffect(()=>{
-        fetchlatestblogs();
-    },[])
+        activetab.current.click()
+        if(pagestate=="home"){
+            fetchlatestblogs();
+        }
+        if(!trendingblogs){
+            fetchtrendingblogs();  
+        }
+    },[pagestate])
 
     return (
         <AnimationWrapper>
@@ -30,7 +67,7 @@ const HomePage = () => {
                 {/* {Latest Blogs} */}
                 <div className="w-full">
 
-                    <InPageNavigation routes={["Home", "Trending Blogs"]} defaulthidden = {["Trending Blogs"]}>
+                    <InPageNavigation routes={[pagestate, "Trending Blogs"]} defaulthidden = {["Trending Blogs"]}>
 
                         <>
                         {
@@ -44,12 +81,63 @@ const HomePage = () => {
                         }
                         </>
 
-                        <h1>Trending Blogs Here</h1>
+                        {/* <h1>Trending Blogs Here</h1> */}
+
+                        {
+                            trendingblogs ==null ? <Loader />:
+                            trendingblogs.map((blog,i) =>{
+                                return <AnimationWrapper transition={{duration:1, delay: i*.1}} key={i}>
+                                    <MinimalBlogPost blog={blog} index={i} /> 
+                                </AnimationWrapper>
+                            })
+                             
+                        }
                     </InPageNavigation>
 
                 </div>
                 {/* {filters and trending blogs } */}
-                <div>
+                <div className="min-w-[40%] lg:min-w-[400px] max-w-min bogder-1 border-grey pl-8 pt-3 max-md:hidden">
+
+                    <div className="flex flex-col gap-10 ">
+                        <div>
+
+                        <h1 className="font-medium text-xl">Stories from all interests</h1>
+
+                        <div className="flex gap-3 flex-wrap">
+
+                        {
+                            categories.map((category,i)=>{
+                                return <button onClick={loadBlogbycategory} className={"tag" + (pagestate==category ? " bg-black text-white " : " ")}
+                                >
+                                    {category}
+                                </button>
+                            })
+
+                        }
+
+                        </div>
+
+
+                    </div>
+
+                    <div>
+                        <h1 className="font-medium text-xl mb-8">
+                            Trending
+                            <i className="fi fi-rr-arrow-trend-up" ></i>
+                        </h1>
+
+
+                        {
+                            trendingblogs ==null ? <Loader />:
+                            trendingblogs.map((blog,i) =>{
+                                return <AnimationWrapper transition={{duration:1, delay: i*.1}} key={i}>
+                                    <MinimalBlogPost blog={blog} index={i} /> 
+                                </AnimationWrapper>
+                            })
+                             
+                        }
+                    </div>
+                    </div>
 
                 </div>
 

@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react"
 
+export let activetablineref;
+export let activetab;
+
 const InPageNavigation = ({routes, defaulthidden, defaultactiveindex=0, children}) => {
     let [inpagenavindex,setinpagenavindex] = useState(defaultactiveindex); 
-    let activetablineref = useRef();
-    let activetab = useRef();
+    activetablineref = useRef();
+    activetab = useRef();
 
 
     const changepagestate = (btn,i) =>{
