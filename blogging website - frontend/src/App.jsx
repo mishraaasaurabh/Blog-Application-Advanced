@@ -10,7 +10,7 @@ export const UserContext = createContext({})
 
 const App = () => {
 
-    console.log(import.meta.env.VITE_PORT)
+    // console.log(import.meta.env.VITE_PORT)
 
     const [userAuth, setUserAuth] = useState();
     useEffect(() => {

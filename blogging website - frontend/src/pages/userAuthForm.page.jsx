@@ -14,11 +14,11 @@ const UserAuthForm = ({ type }) => {
 
     let { userAuth: { access_token }, setUserAuth } = useContext(UserContext)
 
-    console.log(access_token)
+    // console.log("accesstoken",access_token)
 
-    const userAuthThroughServer =async (serverRoute, formData) => {
-        console.log("Server Route: ", serverRoute);
-        console.log('VITE_SERVER_DOMAIN:', import.meta.env.VITE_SERVER_DOMAIN);
+    const userAuthThroughServer = async (serverRoute, formData) => {
+        // console.log("Server Route: ", serverRoute);
+        // console.log('VITE_SERVER_DOMAIN:', import.meta.env.VITE_SERVER_DOMAIN);
 
        await axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}${serverRoute}`, formData)
             .then(({ data }) => {

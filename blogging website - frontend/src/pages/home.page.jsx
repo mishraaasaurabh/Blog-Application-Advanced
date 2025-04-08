@@ -15,7 +15,7 @@ const HomePage = () => {
 
     let [pagestate, setpagestate] = useState("home");
 
-    let categories = ["programming", "hollywood", "film making", "social media", "cooking", "tech", "finance", "travel", "history"];
+    let categories = ["sports", "programming", "hollywood", "film making", "social media", "cooking", "tech", "finance", "travel", "history"];
 
     const fetchlatestblogs = () => {
         axios.get(import.meta.env.VITE_SERVER_DOMAIN + "/latest-blogs")

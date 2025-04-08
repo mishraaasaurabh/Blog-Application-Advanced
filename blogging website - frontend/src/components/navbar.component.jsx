@@ -14,7 +14,7 @@ const Navbar = () => {
     let { access_token, profile_img } = userAuth || {}; // Safe destructuring
 
     useEffect(()=>{
-        console.log("Userauth updated ",userAuth);
+        // console.log("Userauth updated ",userAuth);
     },[userAuth])
 
     const handleLogout = ()=>{
