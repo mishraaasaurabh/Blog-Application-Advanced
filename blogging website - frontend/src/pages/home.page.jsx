@@ -20,8 +20,8 @@ const HomePage = () => {
     const fetchlatestblogs = (page=2) => {
         axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/latest-blogs", {page})
             .then(({ data }) => {
-                console.log(data.blogs)
-                // setBlog(data.blogs)
+                // console.log(data.blogs)
+                setBlog(data.blogs)
             })
             .catch(err => {
                 console.log(err);
