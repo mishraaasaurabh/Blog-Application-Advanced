@@ -17,7 +17,7 @@ const HomePage = () => {
 
     let categories = ["sports", "programming", "hollywood", "film making", "social media", "cooking", "tech", "finance", "travel", "history"];
 
-    const fetchlatestblogs = (page=2) => {
+    const fetchlatestblogs = (page=1) => {
         axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/latest-blogs", {page})
             .then(({ data }) => {
                 // console.log(data.blogs)
