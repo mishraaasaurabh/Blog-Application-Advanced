@@ -17,11 +17,11 @@ const HomePage = () => {
 
     let categories = ["sports", "programming", "hollywood", "film making", "social media", "cooking", "tech", "finance", "travel", "history"];
 
-    const fetchlatestblogs = () => {
-        axios.get(import.meta.env.VITE_SERVER_DOMAIN + "/latest-blogs")
+    const fetchlatestblogs = (page=2) => {
+        axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/latest-blogs", {page})
             .then(({ data }) => {
-                // console.log(data.blogs)
-                setBlog(data.blogs)
+                console.log(data.blogs)
+                // setBlog(data.blogs)
             })
             .catch(err => {
                 console.log(err);

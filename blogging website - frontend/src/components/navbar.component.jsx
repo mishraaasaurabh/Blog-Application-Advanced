@@ -56,15 +56,20 @@ const Navbar = () => {
                         <i className="fi fi-rr-file-edit"></i>
                         <p>Write</p>
                     </Link>
+                    <button className={"btn-dark " + (!access_token? " hidden ": " ")} onClick={handleLogout}>Logout</button>
 
                     {
                         access_token ?
-                            
-                            <button className="btn-dark py-2" 
-                                    onClick={handleLogout}
-                            >
-                                    Log Out
-                                </button>
+
+                            <div>
+
+
+                            <Link to="/editor" className="  gap-2 link md:hidden">
+                                 <i className="fi fi-rr-file-edit"></i>
+                                 <p>Write</p>
+                             </Link>
+
+                            </div>
 
                             :
                             <>
