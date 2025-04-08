@@ -160,7 +160,7 @@ const BlogEditor = () => {
             return toast.error("Upload a banner to publish it")
         }
         if(!title.length){
-            return toast.err("Write blog title to publish it")
+            return toast.error("Write blog title to publish it")
         }
         if(textEditor.isReady){
             textEditor.save().then(data =>{
