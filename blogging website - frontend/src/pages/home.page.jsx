@@ -7,6 +7,9 @@ import BlogPostCard from "../components/blog-post.component"
 import MinimalBlogPost from "../components/nobanner-blog-post.component"
 import { activetablineref, activetab } from "../components/inpage-navigation.component"
 import NoDateMessage from "../components/nodata.component"
+import { filterPaginationData } from "../common/filter-pagination-data"
+import LoadMoreDatabtn from "../components/load-more.component"
+
 
 const HomePage = () => {
 
@@ -17,11 +20,21 @@ const HomePage = () => {
 
     let categories = ["sports", "programming", "hollywood", "film making", "social media", "cooking", "tech", "finance", "travel", "history"];
 
-    const fetchlatestblogs = (page=1) => {
+    const fetchlatestblogs = ({page=1}) => {
         axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/latest-blogs", {page})
-            .then(({ data }) => {
-                // console.log(data.blogs)
-                setBlog(data.blogs)
+            .then(async ({ data }) => {
+                console.log(data.blogs)
+                // setBlog(data.blogs)
+
+                let formatedData= await filterPaginationData({
+                    state: blogs,
+                    data: data.blogs,
+                    page,
+                    countroute: "/all-latest-blogs-count"
+                })
+
+                console.log(formatedData);
+                setBlog(formatedData)  
             })
             .catch(err => {
                 console.log(err);
@@ -52,11 +65,20 @@ const HomePage = () => {
         }
     }
 
-    const fetchblogbycategory = () => {
-        axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/search-blogs", { tag: pagestate })
-            .then(({ data }) => {
+    const fetchblogbycategory = ({page=1}) => {
+        axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/search-blogs", { tag: pagestate,page })
+            .then( async ({ data }) => {
                 // console.log(data.blogs)
-                setBlog(data.blogs)
+                let formatedData= await filterPaginationData({
+                    state: blogs,
+                    data: data.blogs,
+                    page,
+                    countroute: "/search-blogs-count",
+                    data_to_send: { tag:pagestate}
+                })
+
+                console.log(formatedData); 
+                setBlog(formatedData)
             })
             .catch(err => {
                 console.log(err);
@@ -66,10 +88,10 @@ const HomePage = () => {
     useEffect(() => {
         activetab.current.click()
         if (pagestate == "home") {
-            fetchlatestblogs();
+            fetchlatestblogs({page: 1});
         }
         else {
-            fetchblogbycategory();
+            fetchblogbycategory({page: 1});
         }
         if (!trendingblogs) {
             fetchtrendingblogs();
@@ -86,17 +108,22 @@ const HomePage = () => {
 
                         <>
                             {
-                                blogs == null ? <Loader /> :
-                                    blogs.length ?
-                                        blogs.map((blog, i) => {
-                                            return <AnimationWrapper transition={{ duration: 1, delay: i * .1 }} key={i}>
+                                blogs == null ? (<Loader /> ):  
+                                (
+                                    blogs.results.length ?
+                                        blogs.results.map((blog, i) => {
+                                            return ( <AnimationWrapper transition={{ duration: 1, delay: i * .1 }} key={i}>
                                                 <BlogPostCard content={blog}
                                                     author={blog.author.personal_info} />
                                             </AnimationWrapper>
+                                            );
                                         })
                                         :
                                         <NoDateMessage message={"No Blogs Published"} />
-                            }
+                           ) }
+                           {/* LoadMoreDatabtn */}
+
+                            <LoadMoreDatabtn state={blogs} fetchDatafn={(pagestate=="home"? fetchlatestblogs : fetchblogbycategory)} />
                         </>
 
                         {/* <h1>Trending Blogs Here</h1> */}
