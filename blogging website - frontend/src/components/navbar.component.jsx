@@ -24,6 +24,12 @@ const Navbar = () => {
         navigate("/signin")
     }
 
+    const handlesearch = (e)=>{
+        let query = e.target.value;
+        if(e.keyCode==13 && query.length)
+         navigate(`/search/${query}`)
+    }
+
 
     return (
         <>
@@ -39,6 +45,7 @@ const Navbar = () => {
                         type="text"
                         placeholder="Search"
                         className="w-full md:w-auto bg-grey p-4 pl-6 pr-[10%] md:pr-6 rounded-full placeholder:text-dark-grey md:pl-12"
+                        onKeyDown={handlesearch}
                     />
 
 
