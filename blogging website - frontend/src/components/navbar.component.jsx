@@ -1,33 +1,47 @@
-import { Link, Outlet, useNavigate} from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import logo from "../imgs/logo.png"
 import { useContext, useState } from "react";
 import { UserContext } from "../App";
 import { useEffect } from "react";
+import UserNavigationPanel from "./user-navigation.component";
 
 const Navbar = () => {
 
     const [searchboxvisibility, setsearchboxvisibility] = useState(false)
+    const [userNavpanel, setUSerNAvPanel] = useState(false);
     const navigate = useNavigate();
 
     // const { userAuth, userAuth: { access_token, profile_img } } = useContext(UserContext)
     const { userAuth, setUserAuth } = useContext(UserContext) || {}; // Add fallback to empty object
     let { access_token, profile_img } = userAuth || {}; // Safe destructuring
 
-    useEffect(()=>{
+    useEffect(() => {
         // console.log("Userauth updated ",userAuth);
-    },[userAuth])
+    }, [userAuth])
 
-    const handleLogout = ()=>{
+    const handleLogout = () => {
         userAuth.access_token = null
         // localStorage.removeItem(access_token)
         // setUserAuth({}); 
         navigate("/signin")
     }
 
-    const handlesearch = (e)=>{
+    const handlesearch = (e) => {
         let query = e.target.value;
-        if(e.keyCode==13 && query.length)
-         navigate(`/search/${query}`)
+        if (e.keyCode == 13 && query.length)
+            navigate(`/search/${query}`)
+    }
+
+    const handleusernavpanel = ()=>{
+        setUSerNAvPanel(curr=>!curr)
+    }
+    
+    const handleblur = ()=>{
+        setTimeout(()=>{
+            setUSerNAvPanel(false)
+
+        },200)
+         
     }
 
 
@@ -63,23 +77,32 @@ const Navbar = () => {
                         <i className="fi fi-rr-file-edit"></i>
                         <p>Write</p>
                     </Link>
-                    <button className={"btn-dark " + (!access_token? " hidden ": " ")} onClick={handleLogout}>Logout</button>
-
                     {
                         access_token ?
-
-                            <div>
-
-
-                            <Link to="/editor" className="  gap-2 link md:hidden">
-                                 <i className="fi fi-rr-file-edit"></i>
-                                 <p>Write</p>
-                             </Link>
-
-                            </div>
-
-                            :
                             <>
+                                <Link to="/dashboard/notification" >
+                                    <button className="w-12 h-12 rounded-full bg-grey relative hover:bg-black/10
+                        ">
+                                        <i className="fi fi-rr-bell text-2xl block mt-1"></i>
+
+                                    </button>
+                                </Link>
+
+                                <div className="relative" onClick={handleusernavpanel} onBlur={handleblur}>
+                                    <button className="w-12 h-12 mt-1 ">
+                                        <img src={profile_img} alt="" className="w-12 h-12 object-cover rounded-full" />
+                                    </button>
+                                </div>
+                                {
+                                    userNavpanel?<UserNavigationPanel />:
+                                    " "
+                                }
+                            </>
+                            :
+
+
+                            <>
+
                                 <Link className="btn-dark py-2" to="/signin">
                                     Sign In
                                 </Link>
@@ -90,6 +113,9 @@ const Navbar = () => {
 
                             </>
                     }
+
+
+
 
 
 
