@@ -81,7 +81,7 @@ const ProfilePage = () => {
                     countroute: "/search-blogs-count",
                     data_to_send: { author: user_id }
                 })
-                formatedData.user_id = user_id
+                    formatedData.user_id = user_id
 
                 // console.log(formatedData);
                 setblogs(formatedData);
